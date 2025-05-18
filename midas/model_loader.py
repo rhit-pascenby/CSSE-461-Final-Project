@@ -23,12 +23,14 @@ default_models = {
     "midas_v21_384": "weights/midas_v21_384.pt",
     "midas_v21_small_256": "weights/midas_v21_small_256.pt",
     "openvino_midas_v21_small_256": "weights/openvino_midas_v21_small_256.xml",
+    "finetuned_midas_nyuv2": "weights/finetuned_midas_nyuv2.pt",
+    "finetuned_midas_nyuv2_2": "weights/finetuned_midas_nyuv2_2.pt"
+
 }
 
 
 def load_model(device, model_path, model_type="dpt_large_384", optimize=True, height=None, square=False):
     """Load the specified network.
-
     Args:
         device (device): the torch device used
         model_path (str): path to saved model
@@ -36,7 +38,6 @@ def load_model(device, model_path, model_type="dpt_large_384", optimize=True, he
         optimize (bool): optimize the model to half-integer on CUDA?
         height (int): inference encoder image height
         square (bool): resize to a square resolution?
-
     Returns:
         The loaded network, the transform which prepares images as input to the network and the dimensions of the
         network input
@@ -76,10 +77,10 @@ def load_model(device, model_path, model_type="dpt_large_384", optimize=True, he
         resize_mode = "minimal"
         normalization = NormalizeImage(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
-    elif model_type == "dpt_swin2_large_384":
+    elif model_type == "dpt_swin2_large_384" or model_type == "finetuned_midas_nyuv2" or model_type == "finetuned_midas_nyuv2_2":
         model = DPTDepthModel(
             path=model_path,
-            backbone="swin2l24_384",
+            backbone="vitl16_384",  # <---  "vitl16_384"
             non_negative=True,
         )
         net_w, net_h = 384, 384
@@ -177,7 +178,7 @@ def load_model(device, model_path, model_type="dpt_large_384", optimize=True, he
 
     elif model_type == "midas_v21_small_256":
         model = MidasNet_small(model_path, features=64, backbone="efficientnet_lite3", exportable=True,
-                               non_negative=True, blocks={'expand': True})
+                                            non_negative=True, blocks={'expand': True})
         net_w, net_h = 256, 256
         resize_mode = "upper_bound"
         normalization = NormalizeImage(
@@ -199,7 +200,17 @@ def load_model(device, model_path, model_type="dpt_large_384", optimize=True, he
         assert False
 
     if not "openvino" in model_type:
-        print("Model loaded, number of parameters = {:.0f}M".format(sum(p.numel() for p in model.parameters()) / 1e6))
+        # Load the pre-trained weights
+        parameters = torch.load(model_path, map_location=device)  # Load weights from path
+
+        print("Pre-trained weights shapes:")
+        for k, v in parameters.items():
+            print(f"  {k}: {v.shape}")
+        print("Current model shapes:")
+        for k, v in model.state_dict().items():
+            print(f"  {k}: {v.shape}")
+        model.load_state_dict(parameters)
+
     else:
         print("Model loaded, optimized with OpenVINO")
 
