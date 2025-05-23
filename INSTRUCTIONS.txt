@@ -8,7 +8,7 @@ Here are the step by step instructions on how to get this running on your comput
 7. Then, type this command “python run.py --model_type <model_type> --input_path input --output_path output” where you input your model in the <model_type>. For example, if you want to use the dpt_large_384.pt weights, you would run “python run.py --model_type dpt_large_384 --input_path input --output_path output”
   a. Your environment should have all the libraries to run the file, but for some reason if you get an error that says “[library name] not found”, enter “pip install [library name]”
 8. After the program is done running, the output image will be inside the ./outputs directory
-
+Sample Inputs/Outputs for dpt_large_384 model is in the ./Sample_dpt_large_384 directory
 
 Extension: Fine tune your model 
 This is if you want to fine tune an existing model
@@ -23,11 +23,13 @@ NUM_EPOCHS = 20  # Reduced epochs for faster debugging
 SAVE_MODEL_PATH = "finetuned_midas_nyuv2.pt"
 DATA_DIR = "data/nyuv2"  # Define a data directory.  This might not be needed with HF Datasets.
 2. After values are adjusted, run “python train_custom.py” in the terminal and the custom weight will be generated.
-  a. Sample of custom weight is here with the name finetuned_midas_nyuv2_2.pt, this was done with the default configurations https://www.dropbox.com/scl/fo/lojbe84wxgmqevnhj8dir/APwaxDn_pZXC-vrXzHALpfk?rlkey=qoy7mb79po1xq33v1hush7mtt&st=dlbg0elz&dl=0
+  a. Sample of custom weight is here with the name finetuned_midas_nyuv2_2.pt, this was done with the default configurations 
+  Sample Inputs/Outputs for finetuned_midas_nyuv2_2 model is in the ./Sample_finetuned_midas_nyuv2_2 directory
+https://www.dropbox.com/scl/fo/lojbe84wxgmqevnhj8dir/APwaxDn_pZXC-vrXzHALpfk?rlkey=qoy7mb79po1xq33v1hush7mtt&st=dlbg0elz&dl=0
   b. Again, if there are any errors that says “[library name] not found”, enter “pip install [library name]”
 
 For clarification, I did not make any additional code to get Midas to run on my machine.
-I did create "train_custom.py" and altered the code for "midas/model_loader.py" to make it compatible with a fine tuned model.
+We did create "train_custom.py" and altered the code for "midas/model_loader.py" to make it compatible with a fine tuned model.
 Source:
 Used Google Gemini to help debugging train_custom.py
 This repository is forked from isl-org/MiDaS. The License for that is included in the LICENSE file in this repository.
