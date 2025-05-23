@@ -1,32 +1,31 @@
 Here are the step by step instructions on how to get this running on your computer
-Clone/download this repository
-The weights are not included in this repository due to a file size limitation on github. Instead, there is a link to download the weights on the README.md page. The best weights we were able to get it running on our device was dpt_large_384.pt. You can also download this here: https://github.com/isl-org/MiDaS/releases/download/v3/dpt_large_384.pt. If this link does not work, you could also download it through this dropbox link as well https://www.dropbox.com/scl/fo/lojbe84wxgmqevnhj8dir/APwaxDn_pZXC-vrXzHALpfk?rlkey=qoy7mb79po1xq33v1hush7mtt&st=dlbg0elz&dl=0. 
-Once you download your weights, move the weights to the ./weights folder.
-Get the image you want to use as an input to the ./inputs folder. A sample image of a dog is already in this folder for you to use.
-Go to an anaconda terminal and enter “conda env create -f environments.yaml” to set up your environments.
-To activate it, enter “conda activate midas-py310”
-Then, type this command “python run.py --model_type <model_type> --input_path input --output_path output” where you input your model in the <model_type>. For example, if you want to use the dpt_large_384.pt weights, you would run “python run.py --model_type dpt_large_384 --input_path input --output_path output”
-Your environment should have all the libraries to run the file, but for some reason if you get an error that says “[library name] not found”, enter “pip install [library name]”
-After the program is done running, the output image will be inside the ./outputs directory
+1. Clone/download this repository
+2. The weights are not included in this repository due to a file size limitation on github. Instead, there is a link to download the weights on the README.md page. The best weights we were able to get it running on our device was dpt_large_384.pt. You can also download this here: https://github.com/isl-org/MiDaS/releases/download/v3/dpt_large_384.pt. If this link does not work, you could also download it through this dropbox link as well https://www.dropbox.com/scl/fo/lojbe84wxgmqevnhj8dir/APwaxDn_pZXC-vrXzHALpfk?rlkey=qoy7mb79po1xq33v1hush7mtt&st=dlbg0elz&dl=0. 
+3. Once you download your weights, move the weights to the ./weights folder.
+4. Get the image you want to use as an input to the ./inputs folder. A sample image of a dog is already in this folder for you to use.
+5. Go to an anaconda terminal and enter “conda env create -f environments.yaml” to set up your environments.
+6. To activate it, enter “conda activate midas-py310”
+7. Then, type this command “python run.py --model_type <model_type> --input_path input --output_path output” where you input your model in the <model_type>. For example, if you want to use the dpt_large_384.pt weights, you would run “python run.py --model_type dpt_large_384 --input_path input --output_path output”
+  a. Your environment should have all the libraries to run the file, but for some reason if you get an error that says “[library name] not found”, enter “pip install [library name]”
+8. After the program is done running, the output image will be inside the ./outputs directory
 
 
 Extension: Fine tune your model
 This is if you want to fine tune an existing model
-Go to the file “train_custom.py”
+1. Go to the file “train_custom.py”
 Line 25-33 are the parameters that are meant to be adjusted, but here are the default values:
 # --- Configuration ---
 MODEL_TYPE = "dpt_large_384"
 PRETRAINED_WEIGHTS_PATH = "weights/dpt_large_384.pt"
-
 BATCH_SIZE = 4
 LEARNING_RATE = 1e-5
 NUM_EPOCHS = 20  # Reduced epochs for faster debugging
 SAVE_MODEL_PATH = "finetuned_midas_nyuv2.pt"
 DATA_DIR = "data/nyuv2"  # Define a data directory.  This might not be needed with HF Datasets.
-After values are adjusted, run “python train_custom.py” in the terminal and the custom weight will be generated.
-Sample of custom weight is here with the name finetuned_midas_nyuv2_2.pt, this was done with the default configurations
-Again, if there are any errors that says “[library name] not found”, enter “pip install [library name]”
+2. After values are adjusted, run “python train_custom.py” in the terminal and the custom weight will be generated.
+  a. Sample of custom weight is here with the name finetuned_midas_nyuv2_2.pt, this was done with the default configurations https://www.dropbox.com/scl/fo/lojbe84wxgmqevnhj8dir/APwaxDn_pZXC-vrXzHALpfk?rlkey=qoy7mb79po1xq33v1hush7mtt&st=dlbg0elz&dl=0
+  b. Again, if there are any errors that says “[library name] not found”, enter “pip install [library name]”
 
 Source:
-Used Google Gemini in helping debugging train_custom.py
+Used Google Gemini to help debugging train_custom.py
 This repository is forked from isl-org/MiDaS. The License for that is included in the LICENSE file in this repository.
